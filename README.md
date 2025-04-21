@@ -43,7 +43,7 @@ Projet personnel réalisé autour d’une application volontairement vulnérable
 Le pipeline s'exécute automatiquement à chaque build.  
 Chaque étape est visible dans le Jenkins Stage View :
 
-![stage-view](capture.png)
+![stage-view](./jenkins-stage-view.png)
 
 Des rapports de sécurité sont générés automatiquement et sauvegardés sur l’instance EC2.
 
