@@ -1,109 +1,59 @@
-Techstart Vulnerable Web App Modified by Shikhar Verma :baby_symbol:
-=
+# 🔐 DevSecOps CI/CD – Analyse & Déploiement sécurisé de l’application Techstart
 
-Techstart is a broken web application in order to understand behavior of bugs and vulnerabilities, for example, 
-:clock4: Quick Start
--
+Projet personnel réalisé autour d’une application volontairement vulnérable (Techstart/EasyBuggy), dans le but de construire un pipeline CI/CD sécurisé intégrant l’analyse statique, le scan des dépendances, les tests dynamiques et le déploiement automatisé sur Kubernetes.
 
-    $ mvn clean install
+---
 
-( or ``` java -jar easybuggy.jar ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy/blob/master/pom.xml#L204). )
+## 🚀 Objectifs du projet
 
-Access to
+- Reproduire des vulnérabilités connues dans un environnement contrôlé
+- Intégrer des outils de sécurité dans une chaîne CI/CD complète
+- Automatiser le build, l’analyse, le scan, le push et le déploiement
+- Déployer sur AWS via Jenkins, EC2, ECR et EKS
 
-    http://localhost:8080
+---
 
-:clock4: Quick Start(Docker)
--
+## 🛠️ Stack utilisée
 
-    $ docker build . -t easybuggy:local # Build container image
-    $ docker run -p 8080:8080 easybuggy:local # Start Techstart
+| Catégorie         | Outils / Services                                                                 |
+|-------------------|------------------------------------------------------------------------------------|
+| CI/CD             | Jenkins (pipeline déclaratif) – hébergé sur EC2                                   |
+| Sécurité          | SonarQube (SAST), Trivy, Snyk (SCA), OWASP ZAP (DAST en CLI sur EC2)              |
+| Conteneurisation  | Docker, Amazon ECR                                                                |
+| Orchestration     | Kubernetes (EKS)                                                                   |
+| Infrastructure    | AWS EC2 (Jenkins, ZAP, Trivy), IAM, VPC                                            |
+| IaC / Config      | Terraform, Helm                                                                    |
 
-Access to
+---
 
-    http://localhost:8080
+## 📦 Pipeline Jenkins
 
-### To stop:
+- ✅ **Build Maven**
+- ✅ **Scan SAST** avec SonarQube
+- ✅ **Scan SCA** avec Snyk & Trivy
+- ✅ **DAST** avec OWASP ZAP (en headless sur EC2)
+- ✅ **Push image Docker** vers Amazon ECR
+- ✅ **Déploiement automatique** sur EKS
+- ✅ **Scan post-deploy** et visualisation des résultats
 
-  Use <kbd>CTRL</kbd>+<kbd>C</kbd> ( or access to: http://localhost:8080/exit )
+---
 
-:clock4: For more detail
--
+## 📊 Résultat
 
-:clock4: Demo
--
+Le pipeline s'exécute automatiquement à chaque build.  
+Chaque étape est visible dans le Jenkins Stage View :
 
-This demo shows: Start up -> Infinite Loop -> LDAP Injection -> UnsatisfiedLinkError -> BufferOverflowException -> Deadlock -> Memory Leak -> JVM Crash (Shut down)
+![stage-view](capture.png)
 
-![demo](https://github.com/k-tamura/easybuggy/blob/master/demo_eb.gif)
+Des rapports de sécurité sont générés automatiquement et sauvegardés sur l’instance EC2.
 
-:clock4: Techstart can reproduce:
--
+---
 
-* Troubles
+## 🔗 Démo rapide
 
-  * Memory Leak (Java heap space)
-  * Memory Leak (PermGen space)
-  * Memory Leak (C heap space)
-  * Deadlock (Java)
-  * Deadlock (SQL)
-  * Endless Waiting Process
-  * Infinite Loop
-  * Redirect Loop
-  * Forward Loop
-  * JVM Crash
-  * Network Socket Leak
-  * Database Connection Leak
-  * File Descriptor Leak 
-  * Thread Leak 
-  * Mojibake
-  * Integer Overflow
-  * Round Off Error
-  * Truncation Error
-  * Loss of Trailing Digits
+### Local :
 
-* Vulnerabilities
+```bash
+mvn clean install
+java -jar target/easybuggy.jar
 
-  * XSS (Cross-Site Scripting)
-  * SQL Injection
-  * LDAP Injection
-  * Code Injection
-  * OS Command Injection (OGNL Expression Injection)
-  * Mail Header Injection
-  * Null Byte Injection
-  * Extension Unrestricted File Upload
-  * Size Unrestricted File Upload
-  * Open Redirect
-  * Brute-force Attack
-  * Session Fixation Attacks
-  * Verbose Login Error Messages
-  * Dangerous File Inclusion
-  * Directory Traversal
-  * Unintended File Disclosure
-  * CSRF (Cross-Site Request Forgery)
-  * XEE (XML Entity Expansion)
-  * XXE (XML eXternal Entity)
-  * Clickjacking
-
-* Performance Degradation
-
-  * Slow Regular Expression Parsing
-  * Delay of creating string due to +(plus) operator
-  * Delay due to unnecessary object creation
-
-* Errors
-
-  * AssertionError
-  * ExceptionInInitializerError
-  * FactoryConfigurationError
-  * GenericSignatureFormatError
-  * NoClassDefFoundError
-  * OutOfMemoryError (Java heap space) 
-  * OutOfMemoryError (Requested array size exceeds VM limit)
-  * OutOfMemoryError (unable to create new native thread)
-  * OutOfMemoryError (GC overhead limit exceeded)
-  * OutOfMemoryError (PermGen space)
-  * OutOfMemoryError (Direct buffer memory)
-  * StackOverflowError
-  * TransformerFactoryConfigurationError
-  * UnsatisfiedLinkError
