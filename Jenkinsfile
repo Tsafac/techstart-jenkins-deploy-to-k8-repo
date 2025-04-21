@@ -54,27 +54,27 @@ pipeline {
          stage ("Sending deployment & service.yaml file to EKS Client Machine"){
              steps{
                  sshagent(['clientekslogin']) {
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104'
-                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/deployment.yaml" ec2-user@54.226.98.104:/tmp'
-                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/service.yaml" ec2-user@54.226.98.104:/tmp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS'
+                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/deployment.yaml" ec2-user@IP_CLIENT_EKS:/tmp'
+                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/service.yaml" ec2-user@IP_CLIENT_EKS:/tmp'
                  }
              }
          }
          stage("Executing Application"){
              steps{
                  sshagent(['clientekslogin']) {
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104 cd /tmp'
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104 /home/ec2-user/bin/kubectl delete all --all -n securityapp'
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104 kubectl apply -f /tmp/deployment.yaml -n securityapp'
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104 kubectl apply -f /tmp/service.yaml -n securityapp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS cd /tmp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS /home/ec2-user/bin/kubectl delete all --all -n securityapp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS kubectl apply -f /tmp/deployment.yaml -n securityapp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS kubectl apply -f /tmp/service.yaml -n securityapp'
                  }
              }
          }
          stage("copy the Zap Script to EKS Client"){
              steps{
                  sshagent(['clientekslogin']) {
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104'
-                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/scrp.sh" ec2-user@54.226.98.104:/tmp'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS'
+                     sh 'scp "/var/lib/jenkins/workspace/jenkins-maven-pipeline-1/scrp.sh" ec2-user@IP_CLIENT_EKS:/tmp'
                  }
              }
          }
@@ -86,8 +86,8 @@ pipeline {
          stage("Dynamic Appln Security Testing Using Zap Tool"){
              steps{
                  sshagent(['clientekslogin']) {
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104'
-                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@54.226.98.104 sh /tmp/scrp.sh'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS'
+                     sh 'ssh -o StrictHostKeyChecking=no ec2-user@IP_CLIENT_EKS sh /tmp/scrp.sh'
                  } 
              }
          }
