@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment3
+  labels:
+    app: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      imagePullSecrets:
+      - name: ecr-key
+      containers:
+      - name: myapp
+        image: 034362040994.dkr.ecr.us-east-1.amazonaws.com/myappdevsecops:39
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
