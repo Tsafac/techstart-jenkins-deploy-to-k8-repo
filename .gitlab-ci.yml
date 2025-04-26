@@ -17,6 +17,7 @@ build:
     paths:
       - .sonar/cache
   script:
+    - export MAVEN_OPTS=""
     - mvn clean install -DskipTests=true
   artifacts:
     paths:
