@@ -29,6 +29,9 @@ trivy-scan:
     entrypoint: [""]
   script:
     - trivy fs --exit-code 0 --severity HIGH,CRITICAL . --ignore-unfixed --format table --output trivy.txt
+  artifacts:
+    paths:
+      - trivy.txt  
   allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
