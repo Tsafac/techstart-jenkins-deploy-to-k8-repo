@@ -1,10 +1,31 @@
 stages:
+  - build
   - sast
   - sca
-  - build
   - test
   - deploy
   - dash
+
+build:
+  stage: build
+  image: maven:3.9.3-eclipse-temurin-17
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  
+    GIT_DEPTH: 0  
+  cache:
+    key: "${CI_COMMIT_REF_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - mvn clean install -DskipTests=true
+  artifacts:
+    paths:
+      - target/*.jar
+  allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+
 sonarqube-check:
   stage: sast
   image: maven:3.9.3-eclipse-temurin-17
