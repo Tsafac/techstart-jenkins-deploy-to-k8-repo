@@ -16,7 +16,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}
+    - mvn verify sonar:sonar -Dsonar.host.url=http://192.168.186.139:9000 -Dsonar.login=${SONAR_TOKEN}
   allow_failure: true 
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
