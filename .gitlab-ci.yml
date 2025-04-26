@@ -24,7 +24,7 @@ sonarqube-check:
 
 trivy-scan:
   stage: sca
-  image: aquqsec/trivy:latest
+  image: aquasec/trivy:latest
   script:
     - trivy fs --exit-code 0 --severity HIGH,CRITICAL . --ignore-unfixed --format table --output trivy.txt
   allow_failure: true
