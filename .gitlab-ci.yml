@@ -1,31 +1,10 @@
 stages:
-  - build
   - sast
   - sca
+  - build
   - test
   - deploy
   - dash
-
-build:
-  stage: build
-  image: maven:3.9.3-eclipse-temurin-8
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  
-    GIT_DEPTH: 0  
-  cache:
-    key: "${CI_COMMIT_REF_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - export MAVEN_OPTS=""
-    - mvn clean install -DskipTests=true -Dexec.skip=true
-  artifacts:
-    paths:
-      - target/*.jar
-  allow_failure: true
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
 
 sonarqube-check:
   stage: sast
@@ -54,6 +33,22 @@ trivy-scan:
   artifacts:
     paths:
       - trivy.txt  
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA} .
+    - docker save -o docker-image.tar ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  artifacts:
+    paths:
+      - docker-image.tar
   allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
