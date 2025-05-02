@@ -1,0 +1,81 @@
+
+Report Summary
+
+┌─────────┬──────┬─────────────────┬─────────┐
+│ Target  │ Type │ Vulnerabilities │ Secrets │
+├─────────┼──────┼─────────────────┼─────────┤
+│ pom.xml │ pom  │       14        │    -    │
+└─────────┴──────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+For OSS Maintainers: VEX Notice
+--------------------------------
+If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+Learn more and start using VEX: https://trivy.dev/v0.61/docs/supply-chain/vex/repo#publishing-vex-documents
+
+To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+
+
+pom.xml (pom)
+=============
+Total: 14 (HIGH: 11, CRITICAL: 3)
+
+┌───────────────────────────────────────┬─────────────────────┬──────────┬────────┬───────────────────┬──────────────────────────────────────────┬──────────────────────────────────────────────────────────────┐
+│                Library                │    Vulnerability    │ Severity │ Status │ Installed Version │              Fixed Version               │                            Title                             │
+├───────────────────────────────────────┼─────────────────────┼──────────┼────────┼───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ commons-fileupload:commons-fileupload │ CVE-2016-1000031    │ CRITICAL │ fixed  │ 1.3.1             │ 1.3.3                                    │ FileUpload: DiskFileItem file manipulation                   │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2016-1000031                 │
+│                                       ├─────────────────────┼──────────┤        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2016-3092       │ HIGH     │        │                   │ 1.3.2                                    │ tomcat: Usage of vulnerable FileUpload package can result in │
+│                                       │                     │          │        │                   │                                          │ denial of service...                                         │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2016-3092                    │
+│                                       ├─────────────────────┤          │        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2023-24998      │          │        │                   │ 1.5                                      │ FileUpload: FileUpload DoS with excessive parts              │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2023-24998                   │
+├───────────────────────────────────────┼─────────────────────┤          │        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ commons-io:commons-io                 │ CVE-2024-47554      │          │        │ 2.2               │ 2.14.0                                   │ apache-commons-io: Possible denial of service attack on      │
+│                                       │                     │          │        │                   │                                          │ untrusted input to XmlStreamReader                           │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2024-47554                   │
+├───────────────────────────────────────┼─────────────────────┤          │        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ mysql:mysql-connector-java            │ CVE-2017-3523       │          │        │ 5.1.25            │ 5.1.41                                   │ mysql-connector-java: Improper automatic deserialization of  │
+│                                       │                     │          │        │                   │                                          │ binary data (CPU Apr 2017)                                   │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2017-3523                    │
+│                                       ├─────────────────────┤          │        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2018-3258       │          │        │                   │ 8.0.13                                   │ mysql-connector-java: Connector/J unspecified vulnerability  │
+│                                       │                     │          │        │                   │                                          │ (CPU October 2018)                                           │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2018-3258                    │
+├───────────────────────────────────────┼─────────────────────┼──────────┤        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.apache.derby:derby                │ CVE-2015-1832       │ CRITICAL │        │ 10.8.3.0          │ 10.12.1.1                                │ Derby: XXE attack possible by using XmlVTI and the XML       │
+│                                       │                     │          │        │                   │                                          │ datatype                                                     │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2015-1832                    │
+│                                       ├─────────────────────┤          │        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2022-46337      │          │        │                   │ 10.14.3, 10.15.2.1, 10.16.1.2, 10.17.1.0 │ A cleverly devised username might bypass LDAP authentication │
+│                                       │                     │          │        │                   │                                          │ checks. I ...                                                │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2022-46337                   │
+├───────────────────────────────────────┼─────────────────────┼──────────┤        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.owasp.esapi:esapi                 │ CVE-2022-23457      │ HIGH     │        │ 2.1.0.1           │ 2.3.0.0                                  │ ESAPI (The OWASP Enterprise Security API) is a free, open    │
+│                                       │                     │          │        │                   │                                          │ source, web...                                               │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2022-23457                   │
+│                                       ├─────────────────────┤          │        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ GHSA-7c2q-5qmr-v76q │          │        │                   │ 2.5.2.0                                  │ DoS vulnerabilities persist in ESAPI file uploads despite    │
+│                                       │                     │          │        │                   │                                          │ remediation of CVE-2023-24998                                │
+│                                       │                     │          │        │                   │                                          │ https://github.com/advisories/GHSA-7c2q-5qmr-v76q            │
+├───────────────────────────────────────┼─────────────────────┤          │        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ xalan:xalan                           │ CVE-2014-0107       │          │        │ 2.7.0             │ 2.7.2                                    │ Xalan-Java: insufficient constraints in secure processing    │
+│                                       │                     │          │        │                   │                                          │ feature                                                      │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2014-0107                    │
+│                                       ├─────────────────────┤          │        │                   ├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2022-34169      │          │        │                   │ 2.7.3                                    │ OpenJDK: integer truncation issue in Xalan-J (JAXP, 8285407) │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2022-34169                   │
+├───────────────────────────────────────┼─────────────────────┤          │        ├───────────────────┼──────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ xerces:xercesImpl                     │ CVE-2012-0881       │          │        │ 2.8.0             │ 2.12.0                                   │ xml: xerces-j2 hash table collisions CPU usage DoS           │
+│                                       │                     │          │        │                   │                                          │ (oCERT-2011-003)                                             │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2012-0881                    │
+│                                       ├─────────────────────┤          │        │                   │                                          ├──────────────────────────────────────────────────────────────┤
+│                                       │ CVE-2013-4002       │          │        │                   │                                          │ OpenJDK: XML parsing Denial of Service (JAXP, 8017298)       │
+│                                       │                     │          │        │                   │                                          │ https://avd.aquasec.com/nvd/cve-2013-4002                    │
+└───────────────────────────────────────┴─────────────────────┴──────────┴────────┴───────────────────┴──────────────────────────────────────────┴──────────────────────────────────────────────────────────────┘
