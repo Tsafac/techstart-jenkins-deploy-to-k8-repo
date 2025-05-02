@@ -58,20 +58,32 @@ deploy_and_dast:
   image: docker:latest
   services:
     - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   script:
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker load -i docker-image.tar
     - docker tag $(docker images --quiet | head -n 1) ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
+    # Créer un réseau Docker partagé
     - docker network create zapnet
-    - docker run -d --name myapp -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
+    # Lancer le conteneur et le connecter à zapnet
+    - docker run -d --name myapp --network zapnet -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
     - docker ps
     - docker logs myapp
     - sleep 10
-    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
+
+    # Scanner avec ZAP dans le même réseau, et écrire le rapport dans le bon dossier
+    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly \
+        zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
+
   artifacts:
     paths:
       - zap-report.html
+
 
   when: manual
   allow_failure: false
