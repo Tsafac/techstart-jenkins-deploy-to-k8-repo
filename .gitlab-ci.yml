@@ -64,11 +64,11 @@ deploy_and_dast:
     - docker tag $(docker images --quiet | head -n 1) ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker network create zapnet
-    - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+    - docker run -d --name myapp -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker ps
     - docker logs ${CI_PROJECT_NAME}
     - sleep 10
-    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://${CI_PROJECT_NAME}:8080 -r zap-report.html || true
+    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
   artifacts:
     paths:
       - zap-report.html
