@@ -77,8 +77,7 @@ deploy_and_dast:
     - sleep 10
 
     # Scanner avec ZAP dans le même réseau, et écrire le rapport dans le bon dossier
-    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly \
-        /zap/zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
+    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly /zap/zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
 
   artifacts:
     paths:
