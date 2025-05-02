@@ -2,7 +2,6 @@ stages:
   - sast
   - sca
   - build
-  - test
   - deploy
   - dash
 
@@ -17,7 +16,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.host.url=https://8e4d-2001-861-5d00-f9c0-9102-1a68-52e-a3ec.ngrok-free.app -Dsonar.login=${SONAR_TOKEN}
+    - mvn verify sonar:sonar -Dsonar.host.url=https://5b8d-2001-861-5d00-f9c0-e3cc-3394-8cf5-dffa.ngrok-free.app  -Dsonar.login=${SONAR_TOKEN}
   allow_failure: true 
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -53,3 +52,19 @@ build:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker load -i docker-image.tar
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+    - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+    - doker ps
+    - docker logs ${CI_PROJECT_NAME}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always      
