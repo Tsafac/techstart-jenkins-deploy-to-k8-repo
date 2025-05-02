@@ -68,7 +68,7 @@ deploy_and_dast:
     - docker ps
     - docker logs ${CI_PROJECT_NAME}
     - sleep 10
-    - docker run --rm --network zapnet ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://${CI_PROJECT_NAME}:8080 -r zap-report.html || true
+    - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://${CI_PROJECT_NAME}:8080 -r zap-report.html || true
   artifacts:
     paths:
       - zap-report.html
