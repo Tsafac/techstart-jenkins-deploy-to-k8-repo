@@ -61,12 +61,14 @@ deploy_and_dast:
   script:
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker load -i docker-image.tar
+    - docker tag $(docker images --quiet | head -n 1) ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+    - docker network create zapnet
     - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker ps
     - docker logs ${CI_PROJECT_NAME}
     - sleep 10
-    - docker run --network host ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://localhost:8080 -r zap-report.html || true
+    - docker run --rm --network zapnet ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://${CI_PROJECT_NAME}:8080 -r zap-report.html || true
   artifacts:
     paths:
       - zap-report.html
