@@ -64,7 +64,7 @@ deploy:
     - docker load -i docker-image.tar
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
-    + doker ps
+    - docker ps
     - docker logs ${CI_PROJECT_NAME}
   when: manual
   allow_failure: true
