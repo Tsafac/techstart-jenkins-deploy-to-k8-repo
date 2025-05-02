@@ -66,7 +66,7 @@ deploy_and_dast:
     - docker network create zapnet
     - docker run -d --name myapp -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker ps
-    - docker logs ${CI_PROJECT_NAME}
+    - docker logs myapp
     - sleep 10
     - docker run --rm --network zapnet -v $(pwd):/zap/wrk ghcr.io/zaproxy/zaproxy:weekly zap-baseline.py -t http://myapp:8080 -r zap-report.html || true
   artifacts:
