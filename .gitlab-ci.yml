@@ -45,7 +45,7 @@ build:
   script:
     - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA} .
     - docker save -o docker-image.tar ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
-  when: manuel
+  when: manual
   artifacts:
     paths:
       - docker-image.tar
@@ -66,7 +66,7 @@ deploy:
     - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - doker ps
     - docker logs ${CI_PROJECT_NAME}
-  when: manuel
+  when: manual
   allow_failure: true
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
