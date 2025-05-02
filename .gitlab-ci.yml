@@ -3,7 +3,6 @@ stages:
   - sca
   - build
   - deploy
-  - dash
 
 sonarqube-check:
   stage: sast
@@ -54,7 +53,7 @@ build:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
 
-deploy:
+deploy_and_dast:
   stage: deploy
   image: docker:latest
   services:
@@ -66,8 +65,15 @@ deploy:
     - docker run -d --name ${CI_PROJECT_NAME} -p 8080:8080 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
     - docker ps
     - docker logs ${CI_PROJECT_NAME}
+    - sleep 10
+    - docker run --network host owasp/zap2docker-stable zap-baseline.py -t http://localhost:8080 -r zap-raport.html || true
+  artifacts:
+    paths:
+      - zap-raport.html
+
   when: manual
-  allow_failure: true
+  allow_failure: false
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always      
+  
