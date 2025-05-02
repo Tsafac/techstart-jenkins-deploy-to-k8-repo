@@ -66,10 +66,10 @@ deploy_and_dast:
     - docker ps
     - docker logs ${CI_PROJECT_NAME}
     - sleep 10
-    - docker run --network host owasp/zap2docker-stable zap-baseline.py -t http://localhost:8080 -r zap-raport.html || true
+    - docker run --network host owasp/zap2docker-weekly zap-baseline.py -t http://localhost:8080 -r zap-report.html || true
   artifacts:
     paths:
-      - zap-raport.html
+      - zap-report.html
 
   when: manual
   allow_failure: false
